@@ -22,10 +22,11 @@ const Login = () => {
           if (res.data.Token) {
             localStorage.setItem("login_token", JSON.stringify(res.data.Token));
             localStorage.setItem("login_email", JSON.stringify(values.email));
+            swal(res.data.message, "", "success");
+            navigate("/home");
           }
-          swal(res.data.message, "", "success");
         })
-        .then(() => navigate("/home"))
+        // .then(() => navigate("/home"))
         .catch((err) => {
           console.log(err);
         });
