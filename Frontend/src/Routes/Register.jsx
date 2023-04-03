@@ -31,7 +31,8 @@ const Register = () => {
       axios
         .post("https://crimson-reindeer-gown.cyclic.app/register", values)
         .then((res) => {
-          swal(res.data, "", "success");
+          console.log(res.data);
+          swal(res.data.message, "", "success");
           setLoading(false);
           console.log(res.data);
         })

@@ -7,7 +7,7 @@ const register = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     if (await userModel.findOne({ email })) {
-      return res.send("User already exists");
+      return res.send({ message: "User already exists" });
     }
     bcrypt.hash(password, 7, async (err, hash) => {
       if (err) {
@@ -19,12 +19,12 @@ const register = async (req, res) => {
           password: hash,
         });
         await newUser.save();
-        res.send("User registered");
+        res.send({ message: "User registered" });
       }
     });
   } catch (err) {
     console.log(err);
-    res.send("Cannot register user");
+    res.send({ message: "Cannot register user" });
   }
 };
 
@@ -34,7 +34,7 @@ const login = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.send("User is not registered");
+      return res.send({ message: "User is not registered" });
     }
 
     if (user.lock_until !== null && Date.now() > user.lock_until) {
@@ -71,7 +71,7 @@ const login = async (req, res) => {
           { _id: user._id },
           { $set: { lock_until: null, suspect: false, login_error: 0 } }
         );
-        return res.send({ Response: "Logged in successfully", Token: token });
+        return res.send({ message: "Logged in successfully", Token: token });
       } else {
         const attempt = user.login_error + 1;
         await userModel.findByIdAndUpdate(
@@ -89,7 +89,7 @@ const login = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send(err.message);
-    res.send("Wrong credentials");
+    res.send({ message: "Wrong credentials" });
   }
 };
 

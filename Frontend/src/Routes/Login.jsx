@@ -5,6 +5,7 @@ import axios from "axios";
 import "../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
+import { useToast } from "@chakra-ui/react";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -12,17 +13,24 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleClick = (values, errors) => {
     if (Object.keys(errors).length === 0) {
       axios
         .post("https://crimson-reindeer-gown.cyclic.app/login", values)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
+          // alert(res.data.messages);
+          swal(
+            "Message:",
+            res.data.messages || res.data.message || res.data.warning,
+            "success"
+          );
           if (res.data.Token) {
             localStorage.setItem("login_token", JSON.stringify(res.data.Token));
             localStorage.setItem("login_email", JSON.stringify(values.email));
-            swal(res.data.message, "", "success");
+
             navigate("/home");
           }
         })
