@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -21,12 +22,21 @@ const SignupSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const handleClick = (values, errors) => {
     if (Object.keys(errors).length === 0) {
+      setLoading(true);
       axios
         .post("https://crimson-reindeer-gown.cyclic.app/register", values)
         .then((res) => {
-          console.log(res);
+          swal(res.data, "", "success");
+          setLoading(false);
+          console.log(res.data);
+        })
+        .then(() => {
+          navigate("/login");
         })
         .catch((err) => {
           console.log(err);
@@ -59,7 +69,11 @@ const Register = () => {
             {errors.email && touched.email ? (
               <div className="alert">{errors.email}</div>
             ) : null}
-            <Field name="password" placeholder="Enter a strong password" />
+            <Field
+              name="password"
+              type="password"
+              placeholder="Enter a strong password"
+            />
             {errors.password && touched.password ? (
               <div className="alert">{errors.password}</div>
             ) : null}

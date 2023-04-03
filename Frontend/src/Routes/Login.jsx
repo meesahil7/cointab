@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import "../App.css";
 import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -17,11 +18,12 @@ const Login = () => {
       axios
         .post("https://crimson-reindeer-gown.cyclic.app/login", values)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.Token) {
             localStorage.setItem("login_token", JSON.stringify(res.data.Token));
             localStorage.setItem("login_email", JSON.stringify(values.email));
           }
+          swal(res.data.message, "", "success");
         })
         .then(() => navigate("/home"))
         .catch((err) => {
@@ -47,7 +49,11 @@ const Login = () => {
           <Form>
             <Field name="email" type="email" placeholder="Enter email" />
             {errors.email && touched.email ? <div>{errors.email}</div> : null}
-            <Field name="password" placeholder="Enter your password" />
+            <Field
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+            />
             {errors.password && touched.password ? (
               <div>{errors.password}</div>
             ) : null}
