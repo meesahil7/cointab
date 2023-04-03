@@ -24,7 +24,7 @@ const Register = () => {
   const handleClick = (values, errors) => {
     if (Object.keys(errors).length === 0) {
       axios
-        .post("http://localhost:7000/register", values)
+        .post("https://crimson-reindeer-gown.cyclic.app/register", values)
         .then((res) => {
           console.log(res);
         })

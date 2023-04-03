@@ -15,7 +15,7 @@ const Login = () => {
   const handleClick = (values, errors) => {
     if (Object.keys(errors).length === 0) {
       axios
-        .post("http://localhost:7000/login", values)
+        .post("https://crimson-reindeer-gown.cyclic.app/login", values)
         .then((res) => {
           console.log(res.data);
           if (res.data.Token) {
