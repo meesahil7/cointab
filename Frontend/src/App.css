@@ -1,0 +1,42 @@
+.App {
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #373747;
+}
+
+h1 {
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  padding: 15px 70px 15px 40px;
+  color: grey;
+  font-size: 16px;
+  /* border-radius: 10px; */
+}
+
+button {
+  padding: 12px 70px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #545fc4;
+  border: none;
+}
+
+.alert {
+  color: red;
+}
