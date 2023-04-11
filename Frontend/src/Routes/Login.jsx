@@ -40,7 +40,7 @@ const Login = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          swal("Error:", err.err, "error");
         });
     }
   };
