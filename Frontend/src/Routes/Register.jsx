@@ -5,6 +5,7 @@ import axios from "axios";
 import "../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
+import { Audio } from "react-loader-spinner";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -31,10 +32,12 @@ const Register = () => {
       axios
         .post("https://crimson-reindeer-gown.cyclic.app/register", values)
         .then((res) => {
-          console.log(res.data);
+          if (res.data.err) {
+          swal(res.data.err, "", "error");
+          } else {
           swal(res.data.message, "", "success");
+          }
           setLoading(false);
-          console.log(res.data);
         })
         .then(() => {
           navigate("/login");
@@ -46,47 +49,53 @@ const Register = () => {
   };
   return (
     <div className="container">
-      <h1 className="heading">Signup</h1>
-      <Formik
-        id="form"
-        initialValues={{
-          name: "",
-          email: "",
-          password: "",
-        }}
-        validationSchema={SignupSchema}
-        // onSubmit={(values) => {
-        //   handleSubmit(values);
-        //   console.log(values);
-        // }}
-      >
-        {({ errors, touched, values }) => (
-          <Form>
-            <Field name="name" placeholder="Enter your name" />
-            {errors.name && touched.name ? (
-              <div className="alert">{errors.name}</div>
-            ) : null}
-            <Field name="email" type="email" placeholder="Enter email" />
-            {errors.email && touched.email ? (
-              <div className="alert">{errors.email}</div>
-            ) : null}
-            <Field
-              name="password"
-              type="password"
-              placeholder="Enter a strong password"
-            />
-            {errors.password && touched.password ? (
-              <div className="alert">{errors.password}</div>
-            ) : null}
-            <button onClick={() => handleClick(values, errors)} type="button">
-              Submit
-            </button>
-            <p>
-              Already have an account? <Link to="/login">Login</Link>
-            </p>
-          </Form>
-        )}
-      </Formik>
+      {loading ? (
+        <Audio color="white" />
+      ) : (
+        <div>
+          {" "}
+          <h1 className="heading">Signup</h1>
+          <Formik
+            id="form"
+            initialValues={{
+              name: "",
+              email: "",
+              password: "",
+            }}
+            validationSchema={SignupSchema}
+          >
+            {({ errors, touched, values }) => (
+              <Form>
+                <Field name="name" placeholder="Enter your name" />
+                {errors.name && touched.name ? (
+                  <div className="alert">{errors.name}</div>
+                ) : null}
+                <Field name="email" type="email" placeholder="Enter email" />
+                {errors.email && touched.email ? (
+                  <div className="alert">{errors.email}</div>
+                ) : null}
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Enter a strong password"
+                />
+                {errors.password && touched.password ? (
+                  <div className="alert">{errors.password}</div>
+                ) : null}
+                <button
+                  onClick={() => handleClick(values, errors)}
+                  type="button"
+                >
+                  Submit
+                </button>
+                <p>
+                  Already have an account? <Link to="/login">Login</Link>
+                </p>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      )}
     </div>
   );
 };
